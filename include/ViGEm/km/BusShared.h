@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2016 Benjamin "Nefarius" Höglinger
+Copyright (c) 2016-2019 Nefarius Software Solutions e.U. and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,9 @@ SOFTWARE.
 
 //
 // GUID identifying the bus device. Used by client library to detect and communicate.
-// 
-// IMPORTANT: make sure to change this value if you fork it or introduce 
-//				breaking changes!
-// 
+//
+// IMPORTANT: make sure to change this value if you fork it or introduce breaking changes!
+//
 // {96E42B22-F5E9-42F8-B043-ED0F932F014F}
 DEFINE_GUID(GUID_DEVINTERFACE_BUSENUM_VIGEM,
     0x96E42B22, 0xF5E9, 0x42F8, 0xB0, 0x43, 0xED, 0x0F, 0x93, 0x2F, 0x01, 0x4F);
@@ -39,13 +38,13 @@ DEFINE_GUID(GUID_DEVINTERFACE_BUSENUM_VIGEM,
 
 //
 // Common version for user-mode library and driver compatibility
-// 
+//
 // On initialization, the user-mode library has this number embedded
 // and sends it to the bus on its enumeration. The bus compares this
 // number to the one it was compiled with. If they match, the bus
 // access is permitted and success reported. If they mismatch, an
 // error is reported and the user-mode library skips this instance.
-// 
+//
 #define VIGEM_COMMON_VERSION            0x0001
 
 #define FILE_DEVICE_BUSENUM             FILE_DEVICE_BUS_EXTENDER
@@ -56,9 +55,9 @@ DEFINE_GUID(GUID_DEVINTERFACE_BUSENUM_VIGEM,
 
 #define IOCTL_VIGEM_BASE 0x801
 
-// 
+//
 // IO control codes
-// 
+//
 #define IOCTL_VIGEM_PLUGIN_TARGET       BUSENUM_W_IOCTL (IOCTL_VIGEM_BASE + 0x000)
 #define IOCTL_VIGEM_UNPLUG_TARGET       BUSENUM_W_IOCTL (IOCTL_VIGEM_BASE + 0x001)
 #define IOCTL_VIGEM_CHECK_VERSION       BUSENUM_W_IOCTL (IOCTL_VIGEM_BASE + 0x002)
@@ -73,14 +72,14 @@ DEFINE_GUID(GUID_DEVINTERFACE_BUSENUM_VIGEM,
 
 
 //
-//  Data structure used in PlugIn and UnPlug ioctls
+// Data structure used in PlugIn and UnPlug ioctls
 //
 
 #pragma region Plugin
 
 //
 // Data structure used in IOCTL_VIGEM_PLUGIN_TARGET requests.
-// 
+//
 typedef struct _VIGEM_PLUGIN_TARGET
 {
     //
@@ -90,33 +89,33 @@ typedef struct _VIGEM_PLUGIN_TARGET
 
     //
     // Serial number of target device.
-    // 
+    //
     IN ULONG SerialNo;
 
-    // 
+    //
     // Type of the target device to emulate.
-    // 
+    //
     VIGEM_TARGET_TYPE TargetType;
 
     //
     // If set, the vendor ID the emulated device is reporting
-    // 
+    //
     USHORT VendorId;
 
     //
     // If set, the product ID the emulated device is reporting
-    // 
+    //
     USHORT ProductId;
 
 } VIGEM_PLUGIN_TARGET, *PVIGEM_PLUGIN_TARGET;
 
 //
 // Initializes a VIGEM_PLUGIN_TARGET structure.
-// 
+//
 VOID FORCEINLINE VIGEM_PLUGIN_TARGET_INIT(
     _Out_ PVIGEM_PLUGIN_TARGET PlugIn,
-          _In_ ULONG SerialNo,
-          _In_ VIGEM_TARGET_TYPE TargetType
+    _In_ ULONG SerialNo,
+    _In_ VIGEM_TARGET_TYPE TargetType
 )
 {
     RtlZeroMemory(PlugIn, sizeof(VIGEM_PLUGIN_TARGET));
@@ -126,13 +125,13 @@ VOID FORCEINLINE VIGEM_PLUGIN_TARGET_INIT(
     PlugIn->TargetType = TargetType;
 }
 
-#pragma endregion 
+#pragma endregion
 
 #pragma region Unplug
 
 //
 // Data structure used in IOCTL_VIGEM_UNPLUG_TARGET requests.
-// 
+//
 typedef struct _VIGEM_UNPLUG_TARGET
 {
     //
@@ -142,17 +141,17 @@ typedef struct _VIGEM_UNPLUG_TARGET
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
 } VIGEM_UNPLUG_TARGET, *PVIGEM_UNPLUG_TARGET;
 
 //
 // Initializes a VIGEM_UNPLUG_TARGET structure.
-// 
+//
 VOID FORCEINLINE VIGEM_UNPLUG_TARGET_INIT(
     _Out_ PVIGEM_UNPLUG_TARGET UnPlug,
-          _In_ ULONG SerialNo
+    _In_ ULONG SerialNo
 )
 {
     RtlZeroMemory(UnPlug, sizeof(VIGEM_UNPLUG_TARGET));
@@ -184,48 +183,48 @@ VOID FORCEINLINE VIGEM_CHECK_VERSION_INIT(
     CheckVersion->Version = Version;
 }
 
-#pragma endregion 
+#pragma endregion
 
 #pragma region XUSB (aka Xbox 360 device) section
 
 //
 // Data structure used in IOCTL_XUSB_REQUEST_NOTIFICATION requests.
-// 
+//
 typedef struct _XUSB_REQUEST_NOTIFICATION
 {
     //
     // sizeof(struct _XUSB_REQUEST_NOTIFICATION)
-    // 
+    //
     ULONG Size;
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
     //
     // Vibration intensity value of the large motor (0-255).
-    // 
+    //
     UCHAR LargeMotor;
 
     //
     // Vibration intensity value of the small motor (0-255).
-    // 
+    //
     UCHAR SmallMotor;
 
     //
     // Index number of the slot/LED that XUSB.sys has assigned.
-    // 
+    //
     UCHAR LedNumber;
 
 } XUSB_REQUEST_NOTIFICATION, *PXUSB_REQUEST_NOTIFICATION;
 
 //
 // Initializes a XUSB_REQUEST_NOTIFICATION structure.
-// 
+//
 VOID FORCEINLINE XUSB_REQUEST_NOTIFICATION_INIT(
     _Out_ PXUSB_REQUEST_NOTIFICATION Request,
-          _In_ ULONG SerialNo
+    _In_ ULONG SerialNo
 )
 {
     RtlZeroMemory(Request, sizeof(XUSB_REQUEST_NOTIFICATION));
@@ -236,29 +235,29 @@ VOID FORCEINLINE XUSB_REQUEST_NOTIFICATION_INIT(
 
 //
 // Data structure used in IOCTL_XUSB_SUBMIT_REPORT requests.
-// 
+//
 typedef struct _XUSB_SUBMIT_REPORT
 {
     //
     // sizeof(struct _XUSB_SUBMIT_REPORT)
-    // 
+    //
     ULONG Size;
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
     //
     // Report to submit to the target device.
-    // 
+    //
     XUSB_REPORT Report;
 
 } XUSB_SUBMIT_REPORT, *PXUSB_SUBMIT_REPORT;
 
 //
 // Initializes an XUSB report.
-// 
+//
 VOID FORCEINLINE XUSB_SUBMIT_REPORT_INIT(
     _Out_ PXUSB_SUBMIT_REPORT Report,
     _In_ ULONG SerialNo
@@ -274,24 +273,24 @@ typedef struct _XUSB_GET_USER_INDEX
 {
     //
     // sizeof(struct _XUSB_GET_USER_INDEX)
-    // 
+    //
     ULONG Size;
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
     //
     // User index of target device.
-    // 
+    //
     OUT ULONG UserIndex;
 
 } XUSB_GET_USER_INDEX, *PXUSB_GET_USER_INDEX;
 
 //
 // Initializes XUSB_GET_USER_INDEX structure.
-// 
+//
 VOID FORCEINLINE XUSB_GET_USER_INDEX_INIT(
     _Out_ PXUSB_GET_USER_INDEX GetRequest,
     _In_ ULONG SerialNo
@@ -311,12 +310,12 @@ typedef struct _DS4_OUTPUT_REPORT
 {
     //
     // Vibration intensity value of the small motor (0-255).
-    // 
+    //
     UCHAR SmallMotor;
 
     //
     // Vibration intensity value of the large motor (0-255).
-    // 
+    //
     UCHAR LargeMotor;
 
     //
@@ -333,24 +332,24 @@ typedef struct _DS4_REQUEST_NOTIFICATION
 {
     //
     // sizeof(struct _XUSB_REQUEST_NOTIFICATION)
-    // 
+    //
     ULONG Size;
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
     //
     // The HID output report
-    // 
+    //
     DS4_OUTPUT_REPORT Report;
 
 } DS4_REQUEST_NOTIFICATION, *PDS4_REQUEST_NOTIFICATION;
 
 //
 // Initializes a DS4_REQUEST_NOTIFICATION structure.
-// 
+//
 VOID FORCEINLINE DS4_REQUEST_NOTIFICATION_INIT(
     _Out_ PDS4_REQUEST_NOTIFICATION Request,
     _In_ ULONG SerialNo
@@ -364,29 +363,29 @@ VOID FORCEINLINE DS4_REQUEST_NOTIFICATION_INIT(
 
 //
 // DualShock 4 request data
-// 
+//
 typedef struct _DS4_SUBMIT_REPORT
 {
     //
     // sizeof(struct _DS4_SUBMIT_REPORT)
-    // 
+    //
     ULONG Size;
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
     //
     // HID Input report
-    // 
+    //
     DS4_REPORT Report;
 
 } DS4_SUBMIT_REPORT, *PDS4_SUBMIT_REPORT;
 
 //
 // Initializes a DualShock 4 report.
-// 
+//
 VOID FORCEINLINE DS4_SUBMIT_REPORT_INIT(
     _Out_ PDS4_SUBMIT_REPORT Report,
     _In_ ULONG SerialNo
@@ -419,29 +418,29 @@ typedef struct _XGIP_REPORT
 
 //
 // Xbox One request data
-// 
+//
 typedef struct _XGIP_SUBMIT_REPORT
 {
     //
     // sizeof(struct _XGIP_SUBMIT_REPORT)
-    // 
+    //
     ULONG Size;
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
     //
     // HID Input report
-    // 
+    //
     XGIP_REPORT Report;
 
 } XGIP_SUBMIT_REPORT, *PXGIP_SUBMIT_REPORT;
 
 //
 // Initializes an Xbox One report.
-// 
+//
 VOID FORCEINLINE XGIP_SUBMIT_REPORT_INIT(
     _Out_ PXGIP_SUBMIT_REPORT Report,
     _In_ ULONG SerialNo
@@ -455,34 +454,34 @@ VOID FORCEINLINE XGIP_SUBMIT_REPORT_INIT(
 
 //
 // Xbox One interrupt data
-// 
+//
 typedef struct _XGIP_SUBMIT_INTERRUPT
 {
     //
     // sizeof(struct _XGIP_SUBMIT_INTERRUPT)
-    // 
+    //
     ULONG Size;
 
     //
     // Serial number of target device.
-    // 
+    //
     ULONG SerialNo;
 
     //
     // Interrupt buffer.
-    // 
+    //
     UCHAR Interrupt[64];
 
     //
     // Length of interrupt buffer.
-    // 
+    //
     ULONG InterruptLength;
 
 } XGIP_SUBMIT_INTERRUPT, *PXGIP_SUBMIT_INTERRUPT;
 
 //
 // Initializes an Xbox One interrupt.
-// 
+//
 VOID FORCEINLINE XGIP_SUBMIT_INTERRUPT_INIT(
     _Out_ PXGIP_SUBMIT_INTERRUPT Report,
     _In_ ULONG SerialNo

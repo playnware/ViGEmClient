@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2017 Benjamin "Nefarius" Höglinger
+Copyright (c) 2017-2019 Nefarius Software Solutions e.U. and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ SOFTWARE.
 
 //
 // STL
-// 
+//
 #include <cstdlib>
 #include <climits>
 #include <vector>
@@ -62,7 +62,7 @@ LONG WINAPI vigem_internal_exception_handler(struct _EXCEPTION_POINTERS* apExcep
 
 //
 // Initializes a virtual gamepad object.
-// 
+//
 PVIGEM_TARGET FORCEINLINE VIGEM_TARGET_ALLOC_INIT(
     _In_ VIGEM_TARGET_TYPE Type
 )

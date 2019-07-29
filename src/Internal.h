@@ -27,13 +27,13 @@ SOFTWARE.
 
 //
 // TODO: this is... not optimal. Improve in the future.
-// 
+//
 #define VIGEM_TARGETS_MAX   USHRT_MAX
 
 
 //
 // Represents a driver connection object.
-// 
+//
 typedef struct _VIGEM_CLIENT_T
 {
     HANDLE hBusDevice;
@@ -42,7 +42,7 @@ typedef struct _VIGEM_CLIENT_T
 
 //
 // Represents the (connection) state of a target device object.
-// 
+//
 typedef enum _VIGEM_TARGET_STATE
 {
     VIGEM_TARGET_NEW,
@@ -55,7 +55,7 @@ class NotificationRequestPool;
 
 //
 // Represents a virtual gamepad object.
-// 
+//
 typedef struct _VIGEM_TARGET_T
 {
     ULONG Size;

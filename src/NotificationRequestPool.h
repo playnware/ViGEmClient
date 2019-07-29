@@ -56,7 +56,7 @@ class NotificationRequestPool
 
 public:
     NotificationRequestPool(
-        PVIGEM_CLIENT client, 
+        PVIGEM_CLIENT client,
         PVIGEM_TARGET target
     );
     ~NotificationRequestPool() noexcept(false);
