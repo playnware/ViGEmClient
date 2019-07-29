@@ -41,7 +41,7 @@ VOID FORCEINLINE XUSB_TO_DS4_REPORT(
         && Input->wButtons & XUSB_GAMEPAD_DPAD_UP) DS4_SET_DPAD(Output, DS4_BUTTON_DPAD_NORTHWEST);
 
     Output->bThumbLX = ((Input->sThumbLX + ((USHRT_MAX / 2) + 1)) / 257);
-    Output->bThumbLY = (-(Input->sThumbLY + ((USHRT_MAX / 2) - 1)) / 257);
+    Output->bThumbLY = (-(Input->sThumbLY + ((USHRT_MAX / 2) - 1)) / 257); //TODO: Check if this is correct!
     Output->bThumbLY = (Output->bThumbLY == 0) ? 0xFF : Output->bThumbLY;
     Output->bThumbRX = ((Input->sThumbRX + ((USHRT_MAX / 2) + 1)) / 257);
     Output->bThumbRY = (-(Input->sThumbRY + ((USHRT_MAX / 2) + 1)) / 257);

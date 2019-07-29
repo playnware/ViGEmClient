@@ -48,3 +48,6 @@
 /app/Tester/Debug
 /Debug
 /app/Tester/x64/Debug
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json

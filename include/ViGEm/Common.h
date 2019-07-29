@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2017 Benjamin "Nefarius" Höglinger
+Copyright (c) 2017-2019 Nefarius Software Solutions e.U. and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,27 +27,29 @@ SOFTWARE.
 
 //
 // Represents the desired target type for the emulated device.
-//  
+//
 typedef enum _VIGEM_TARGET_TYPE
 {
-    // 
+    //
     // Microsoft Xbox 360 Controller (wired)
-    // 
+    //
     Xbox360Wired,
-    // 
+
+    //
     // Microsoft Xbox One Controller (wired)
-    // 
+    //
     XboxOneWired,
+
     //
     // Sony DualShock 4 (wired)
-    // 
+    //
     DualShock4Wired
 
 } VIGEM_TARGET_TYPE, *PVIGEM_TARGET_TYPE;
 
 //
 // Possible XUSB report buttons.
-// 
+//
 typedef enum _XUSB_BUTTON
 {
     XUSB_GAMEPAD_DPAD_UP            = 0x0001,
@@ -70,7 +72,7 @@ typedef enum _XUSB_BUTTON
 
 //
 // Represents an XINPUT_GAMEPAD-compatible report structure.
-// 
+//
 typedef struct _XUSB_REPORT
 {
     USHORT wButtons;
@@ -85,7 +87,7 @@ typedef struct _XUSB_REPORT
 
 //
 // Initializes a _XUSB_REPORT structure.
-// 
+//
 VOID FORCEINLINE XUSB_REPORT_INIT(
     _Out_ PXUSB_REPORT Report
 )
@@ -95,7 +97,7 @@ VOID FORCEINLINE XUSB_REPORT_INIT(
 
 //
 // The color value (RGB) of a DualShock 4 Lightbar
-// 
+//
 typedef struct _DS4_LIGHTBAR_COLOR
 {
     //
@@ -117,7 +119,7 @@ typedef struct _DS4_LIGHTBAR_COLOR
 
 //
 // DualShock 4 digital buttons
-// 
+//
 typedef enum _DS4_BUTTONS
 {
     DS4_BUTTON_THUMB_RIGHT      = 1 << 15,
@@ -137,17 +139,17 @@ typedef enum _DS4_BUTTONS
 
 //
 // DualShock 4 special buttons
-// 
+//
 typedef enum _DS4_SPECIAL_BUTTONS
 {
-    DS4_SPECIAL_BUTTON_PS           = 1 << 0,
+    DS4_SPECIAL_BUTTON_PS           = 1,
     DS4_SPECIAL_BUTTON_TOUCHPAD     = 1 << 1
 
 } DS4_SPECIAL_BUTTONS, *PDS4_SPECIAL_BUTTONS;
 
 //
 // DualShock 4 directional pad (HAT) values
-// 
+//
 typedef enum _DS4_DPAD_DIRECTIONS
 {
     DS4_BUTTON_DPAD_NONE        = 0x8,
@@ -162,9 +164,30 @@ typedef enum _DS4_DPAD_DIRECTIONS
 
 } DS4_DPAD_DIRECTIONS, *PDS4_DPAD_DIRECTIONS;
 
+typedef enum _DS4_SPECIAL_FLAGS
+{
+    DS4_BATTERY_CHARGED = 1 << 3,
+    DS4_USB_CABLE_CONNECTED = 1 << 4,
+    DS4_HEADPHONE_CONNECTED = 1 << 5,
+    DS4_HEADPHONE_JACK_MIC_CONNECTED = 1 << 6,
+    DS4_HEADPHONE_W_MIC_CONNECTED = (DS4_HEADPHONE_CONNECTED|DS4_HEADPHONE_JACK_MIC_CONNECTED)
+
+}DS4_SPECIAL_FLAGS, *PDS4_SPECIAL_FLAGS;
+
+//
+// Dualshock 4 HID Touchpad structure
+//
+typedef struct _DS4_TOUCH
+{
+    unsigned char ucTrackingNum : 7; // unique to each finger down, so for a lift and repress the value is incremented
+    unsigned char ucIsUp : 1; // 0 means down
+    unsigned char ucaTouchData[3]; // TODO: ADD NOTE
+
+}DS4_TOUCH, *PDS4_TOUCH;
+
 //
 // DualShock 4 HID Input report
-// 
+//
 typedef struct _DS4_REPORT
 {
     BYTE bThumbLX;
@@ -175,12 +198,22 @@ typedef struct _DS4_REPORT
     BYTE bSpecial;
     BYTE bTriggerL;
     BYTE bTriggerR;
+    SHORT wAccelX;
+    SHORT wAccelY;
+    SHORT wAccelZ;
+    SHORT wGyroX;
+    SHORT wGyroY;
+    SHORT wGyroZ;
+    BYTE bBatteryLvl;
+    BYTE bSpecialFlags;
+    BYTE bTouchPackets;// max 4 (TODO: Double check max but this should be correct)
+    DS4_TOUCH TouchData[4]; // First two are current touch and last two are last touch
 
 } DS4_REPORT, *PDS4_REPORT;
 
 //
 // Sets the current state of the D-PAD on a DualShock 4 report.
-// 
+//
 VOID FORCEINLINE DS4_SET_DPAD(
     _Out_ PDS4_REPORT Report,
     _In_ DS4_DPAD_DIRECTIONS Dpad
@@ -190,6 +223,16 @@ VOID FORCEINLINE DS4_SET_DPAD(
     Report->wButtons |= (USHORT)Dpad;
 }
 
+VOID FORCEINLINE DS4_SET_SPECIAL_FLAGS(
+    _Out_ PDS4_REPORT Report,
+    _In_ DS4_SPECIAL_FLAGS Flags
+)
+{
+    Report->bSpecialFlags = Flags; // TODO: Check me!
+}
+
+// TODO: Rework!
+// NOTE: This assumes a USB Report??
 VOID FORCEINLINE DS4_REPORT_INIT(
     _Out_ PDS4_REPORT Report
 )
@@ -202,5 +245,21 @@ VOID FORCEINLINE DS4_REPORT_INIT(
     Report->bThumbRY = 0x80;
 
     DS4_SET_DPAD(Report, DS4_BUTTON_DPAD_NONE);
+
+    // TODO: Check if this is optimal
+    Report->TouchData[0].ucIsUp = TRUE;
+    Report->TouchData[1].ucIsUp = TRUE;
+    Report->TouchData[2].ucIsUp = TRUE;
+    Report->TouchData[3].ucIsUp = TRUE;
+}
+
+// TODO: Rework
+VOID FORCEINLINE DS4_REPORT_USB_INIT(
+    _Out_ PDS4_REPORT Report
+)
+{
+    DS4_REPORT_INIT(Report);
+
+    Report->bSpecialFlags = DS4_USB_CABLE_CONNECTED;
 }
 
