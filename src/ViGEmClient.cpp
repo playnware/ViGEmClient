@@ -39,6 +39,7 @@ SOFTWARE.
 #include <climits>
 #include <vector>
 #include <algorithm>
+#include <functional>
 
 #include <thread>
 
