@@ -1,21 +1,22 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <IsPackable>False</IsPackable>
     <NoWarn>CS0649;CS0169</NoWarn>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <UpgradeBackupLocation>C:\Users\Administrator\Code\ViGEmClient\Backup\build\</UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Nefarius.JsonConfig" Version="1.0.2" />
     <PackageReference Include="Nuke.Common" Version="0.13.0" />
     <PackageReference Include="GitVersion.CommandLine" Version="4.0.0" />
     <PackageReference Include="Vestris.ResourceLib" Version="2.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <NukeMetadata Include="**\*.json" Exclude="bin\**;obj\**" />
     <NukeExternalFiles Include="**\*.*.ext" Exclude="bin\**;obj\**" />
@@ -25,11 +26,10 @@
     <EmbeddedResource Include="default.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
-    
     <!-- Common build related files -->
     <None Include="..\build.ps1" />
     <None Include="..\build.sh" />
-    <None Include="..\.nuke" />     
+    <None Include="..\.nuke" />
     <None Include="..\global.json" Condition="Exists('..\global.json')" />
     <None Include="..\nuget.config" Condition="Exists('..\nuget.config')" />
     <None Include="..\Jenkinsfile" Condition="Exists('..\Jenkinsfile')" />
@@ -37,5 +37,4 @@
     <None Include="..\.travis.yml" Condition="Exists('..\.travis.yml')" />
     <None Include="..\GitVersion.yml" Condition="Exists('..\GitVersion.yml')" />
   </ItemGroup>
-
 </Project>
