@@ -10,16 +10,10 @@ TBD
 
 ## How to build
 
-### Dependencies
-
-- [Boost.Asio](https://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio.html)
-
 ### Prerequisites
 
 - Visual Studio **2017** ([Community Edition](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) is just fine)
-- [.NET Core SDK 2.1](https://www.microsoft.com/net/download/dotnet-core/2.1) (or greater, required for building only)
-- [Vcpkg Quick Start](https://github.com/Microsoft/vcpkg#quick-start)
-  - `.\vcpkg.exe install boost-asio:x86-windows-static boost-asio:x64-windows-static`
+- [.NET Core SDK 2.1](https://github.com/dotnet/cli/tree/release/2.1#installers-and-binaries) (or greater, required for building only)
 
 You can either build directly within Visual Studio or in PowerShell by running the build script:
 
@@ -33,7 +27,7 @@ You can either build directly within Visual Studio or in PowerShell by running t
 
 Found a bug and want it fixed? Open a detailed issue on the [GitHub issue tracker](../../issues)!
 
-Have an idea for a new feature? [Check out the project board](https://projects.vigem.org/public/board/27281599595f5fbe5f915884fb9ca2de92726e74173f1ac434300b2d40af), maybe it's already on there! If not, let's have a chat about your request on [Discord](https://discord.vigem.org) or the [community forums](https://forums.vigem.org).
+Have an idea for a new feature? Let's have a chat about your request on [Discord](https://discord.vigem.org) or the [community forums](https://forums.vigem.org).
 
 ### Questions & Support
 
